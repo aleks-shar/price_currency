@@ -25,7 +25,7 @@ final class ProductResource extends JsonResource
             'price' => match ($request->query('currency')) {
                 'USD' => '$' . number_format($this->price / 90, 2, '.', ''),
                 'EUR' => '€' . number_format($this->price / 100, 2, '.', ''),
-                default => number_format($this->price/1.00, 0, '.', ' ') . ' ₽',
+                default => number_format($this->price / 1.00, 0, '.', ' ') . ' ₽',
             },
         ];
     }
