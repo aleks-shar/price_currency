@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Resources;
 
+use App\Models\Enums\Currency;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Config;
 
 /**
  * @mixin Product
@@ -23,9 +25,30 @@ final class ProductResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'price' => match ($request->query('currency')) {
-                'USD' => '$' . number_format($this->price / 90, 2, '.', ''),
-                'EUR' => '€' . number_format($this->price / 100, 2, '.', ''),
-                default => number_format($this->price / 1.00, 0, '.', ' ') . ' ₽',
+                Currency::USD => '$' . number_format(
+                    $this->price / Config::integer(
+                        'price.course_usd',
+                        90
+                    ),
+                    2,
+                    '.',
+                    '',
+                ),
+                Currency::EUR => '€' . number_format(
+                    $this->price / Config::integer(
+                        'price.course_eur',
+                        100
+                    ),
+                    2,
+                    '.',
+                    '',
+                ),
+                default => number_format(
+                    $this->price / 1.00,
+                    0,
+                    '.',
+                    ' ',
+                ) . ' ₽',
             },
         ];
     }

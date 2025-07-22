@@ -22,10 +22,13 @@ final class PriceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'currency' => 'nullable|in:RUB,USD,EUR',
+            'currency' => ['nullable', 'in:RUB,USD,EUR'],
         ];
     }
 
+    /**
+     * @return string[]
+     */
     public function messages(): array
     {
         return [
